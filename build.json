@@ -1,10 +1,12 @@
 {
     "variables": {
         "atlas_username": "{{env `atlas_username`}}",
-        "atlas_name": "ubuntu-trusty64-unity",
+        "atlas_box_name": "{{env `atlas_box_name`}}",
+		"atlas_box_version": "{{env `atlas_box_version`}}",
 		"vagrant_home": "{{env `vagrant_home`}}",
-		"version": "0.0.1",
-		"ubuntu_trusty64_version": "{{env `ubuntu_trusty64_version`}}"
+		"original_user": "{{env `original_user`}}",
+		"original_box": "{{env `original_box`}}",
+		"original_version": "{{env `original_version`}}"
     },
     "provisioners": [
         {
@@ -22,8 +24,8 @@
     "builders": [
         {
             "type": "virtualbox-ovf",
-			"vm_name": "{{user `atlas_name`}}",
-			"source_path": "{{user `vagrant_home`}}/boxes/ubuntu-VAGRANTSLASH-trusty64/{{user `ubuntu_trusty64_version`}}/virtualbox/box.ovf",
+			"vm_name": "{{user `box_name`}}",
+			"source_path": "{{user `vagrant_home`}}/boxes/{{user `original_user`}}-VAGRANTSLASH-{{user `original_box`}}/{{user `original_version`}}/virtualbox/box.ovf",
             "headless": true,
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
@@ -46,16 +48,17 @@
         {
             "type": "atlas",
             "only": ["virtualbox-ovf"],
-            "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
+            "artifact": "{{user `atlas_username`}}/{{user `atlas_box_name`}}",
             "artifact_type": "vagrant.box",
             "metadata": {
                 "provider": "virtualbox",
-                "version": "{{user `version`}}"
+                "version": "{{user `atlas_box_version`}}",
+				"description": "Unity desktop built from {{user `original_user`}}/{{user `original_box`}} v{{user `original_version`}}"
             }
         }
 		]
     ],
     "push": {
-      "name": "{{user `atlas_username`}}/{{user `atlas_name`}}"
+      "name": "{{user `atlas_username`}}/{{user `atlas_box_name`}}"
     }	
 }
