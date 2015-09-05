@@ -14,7 +14,7 @@ To build and deploy a new box, just run
 ```
 ./build.sh $ORIGINAL_USERNAME $ORIGINAL_BOX_NAME $ORIGINAL_VERSION $YOUR_ATLAS_USERNAME $DEST_ATLAS_BOX_NAME $DEST_ATLAS_BOX_VERSION
 ```
-For example, I used the following command to generate this machine https://atlas.hashicorp.com/danielgazineu/boxes/ubuntu-trusty64-unity/versions/0.0.1
+For example, I used the following command to generate this box https://atlas.hashicorp.com/danielgazineu/boxes/ubuntu-trusty64-unity/versions/0.0.1
 ```
 ./build.sh ubuntu trusty64 20150902.0.2 danielgazineu ubuntu-trusty64-unity 0.0.1
 ```
