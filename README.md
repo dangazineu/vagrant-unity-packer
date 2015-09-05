@@ -1,4 +1,4 @@
-#vagrant-trusty64-unity
+#vagrant-unity-packer
 This project is a build configuration that uses [Packer](https://www.packer.io) to build a Virtualbox image and pack it into a [Vagrant](https://www.vagrantup.com/) box.
 
 At the end of the build, the generated box is published to Atlas so it can be used to create development environments with Vagrant. 
