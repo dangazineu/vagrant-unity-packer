@@ -1,0 +1,61 @@
+{
+    "variables": {
+        "atlas_username": "{{env `atlas_username`}}",
+        "atlas_name": "ubuntu-trusty64-unity",
+		"vagrant_home": "{{env `vagrant_home`}}",
+		"version": "0.0.1",
+		"ubuntu_trusty64_version": "{{env `ubuntu_trusty64_version`}}"
+    },
+    "provisioners": [
+        {
+            "type": "shell",
+            "scripts": [
+                "scripts/install-and-config-unity.sh"
+            ],
+            "override": {
+                "virtualbox-ovf": {
+                    "execute_command": "echo 'vagrant'|sudo -S bash '{{.Path}}'"
+                }
+            }
+        }
+    ],
+    "builders": [
+        {
+            "type": "virtualbox-ovf",
+			"vm_name": "{{user `atlas_name`}}",
+			"source_path": "{{user `vagrant_home`}}/boxes/ubuntu-VAGRANTSLASH-trusty64/{{user `ubuntu_trusty64_version`}}/virtualbox/box.ovf",
+            "headless": true,
+            "ssh_username": "vagrant",
+            "ssh_password": "vagrant",
+            "virtualbox_version_file": ".vbox_version",
+			"shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
+			"vboxmanage": [
+				["modifyvm", "{{.Name}}", "--memory", "8192"],
+				["modifyvm", "{{.Name}}", "--cpus", "2"],
+				["modifyvm", "{{.Name}}", "--vram", "128"],
+				["modifyvm", "{{.Name}}", "--accelerate2dvideo", "on"]
+			  ]
+        }
+    ],
+    "post-processors": [
+        [
+		{
+            "type": "vagrant",
+            "keep_input_artifact": false
+        },
+        {
+            "type": "atlas",
+            "only": ["virtualbox-ovf"],
+            "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
+            "artifact_type": "vagrant.box",
+            "metadata": {
+                "provider": "virtualbox",
+                "version": "{{user `version`}}"
+            }
+        }
+		]
+    ],
+    "push": {
+      "name": "{{user `atlas_username`}}/{{user `atlas_name`}}"
+    }	
+}
